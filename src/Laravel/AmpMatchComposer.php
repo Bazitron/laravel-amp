@@ -3,8 +3,8 @@
 namespace Just\Amp\Laravel;
 
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Routing\Router;
 use Illuminate\Contracts\View\View;
+use Illuminate\Routing\Router;
 
 class AmpMatchComposer
 {
@@ -37,17 +37,19 @@ class AmpMatchComposer
         $routeName = $currentRoute->getName();
 
         $matches = preg_match('/\.amp$/', $routeName);
-
+        $action = $currentRoute->getAction();
         if ($matches === 0) {
-            $action = $currentRoute->getAction();
-
             if (isset($action['amp'])) {
                 $uri = $this->urlGenerator->route($action['amp'], $currentRoute->parameters());
 
                 $view->with('ampUrl', $uri);
             }
         }
+        if (isset($action['canonical'])) {
+            $canonical = $this->urlGenerator->route($action['canonical'], $currentRoute->parameters());
+        }
 
         $view->with('hasAmpUrl', isset($uri));
+        $view->with('canonicalUrl', isset($canonical) ? $canonical : null);
     }
 }

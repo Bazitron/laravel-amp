@@ -54,7 +54,7 @@ class AmpRouter
             $ampRouteName = $action['as'] . '.amp';
 
             $router->get($url, array_merge($action, ['amp' => $ampRouteName]));
-            $router->get($prefixed, array_merge($action, ['as' => $ampRouteName]));
+            $router->get($prefixed, array_merge($action, ['as' => $ampRouteName, 'canonical' => $action['as']]));
         });
     }
 }
